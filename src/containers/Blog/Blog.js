@@ -9,20 +9,28 @@ import axios from 'axios';
 class Blog extends Component {
   state = {
     posts: [],
-    selectedPostId: ''
+    selectedPostId: '',
+    error: false
   };
   // GET Data
   componentDidMount() {
-    axios.get('https://jsonplaceholder.typicode.com/posts').then(res => {
-      const posts = res.data.slice(0, 4);
-      const updatedPosts = posts.map(post => {
-        return {
-          ...post,
-          author: 'Mikko'
-        };
+    axios
+      .get('/posts')
+      .then(res => {
+        const posts = res.data.slice(0, 4);
+        const updatedPosts = posts.map(post => {
+          return {
+            ...post,
+            author: 'Mikko'
+          };
+        });
+        this.setState({ posts: updatedPosts });
+      })
+      .catch(err => {
+        // CATCHES ERROR
+        this.setState({ error: true });
+        console.log(err);
       });
-      this.setState({ posts: updatedPosts });
-    });
   }
 
   // post select & get the id
@@ -32,17 +40,24 @@ class Blog extends Component {
   };
 
   render() {
-    const { posts, selectedPostId } = this.state;
-    const post = posts.map(post => (
-      <Post
-        post={post}
-        key={post.id}
-        clicked={() => this.postSelectedHanlder(post.id)}
-      />
-    ));
+    const { error, selectedPostId } = this.state;
+    let posts = (
+      <p style={{ textAlign: 'center' }}> Something went wrong ...</p>
+    );
+    // ERROR HANDLING
+    if (!error) {
+      posts = this.state.posts.map(post => (
+        <Post
+          post={post}
+          key={post.id}
+          clicked={() => this.postSelectedHanlder(post.id)}
+        />
+      ));
+    }
+
     return (
       <div>
-        <section className="Posts">{post}</section>
+        <section className="Posts">{posts}</section>
         <section>
           <FullPost id={selectedPostId} />
         </section>
