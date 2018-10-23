@@ -25,6 +25,7 @@ class Blog extends Component {
     });
   }
 
+  // post select & get the id
   postSelectedHanlder = id => {
     this.setState({ selectedPostId: id });
     console.log(this.state.selectedPostId);
