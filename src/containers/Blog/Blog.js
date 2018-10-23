@@ -4,7 +4,8 @@ import Post from '../../components/Post/Post';
 import FullPost from '../../components/FullPost/FullPost';
 import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '../../axios';
 
 class Blog extends Component {
   state = {
@@ -33,7 +34,7 @@ class Blog extends Component {
       });
   }
 
-  // post select & get the id
+  // post select & get the id need this to pass id as props on fullPost so it will have access to id
   postSelectedHanlder = id => {
     this.setState({ selectedPostId: id });
     console.log(this.state.selectedPostId);
